@@ -6,7 +6,7 @@ class SpaceshipComputer {
 
   def processOpcode(storage: Array[Int]): Array[Int] = {
 
-    var opcodeStart = 0;
+    var opcodeStart = 0
     var continue = true
 
     while (opcodeStart < storage.length && continue) {
