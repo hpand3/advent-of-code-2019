@@ -18,10 +18,9 @@ class SpaceshipComputer {
         val firstMem = storage(storage(opcodeStart + 1))
         val secondMem = storage(storage(opcodeStart + 2))
         val storageLocation = storage(opcodeStart + 3)
-        if (opcode == 1) {
-          storage(storageLocation) = firstMem + secondMem
-        } else if (opcode == 2) {
-          storage(storageLocation) = firstMem * secondMem
+        opcode match {
+          case 1 => storage(storageLocation) = firstMem + secondMem
+          case 2 => storage(storageLocation) = firstMem * secondMem
         }
       }
       opcodeStart += 4
