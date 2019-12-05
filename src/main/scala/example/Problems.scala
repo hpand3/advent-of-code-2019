@@ -57,7 +57,11 @@ object Problem2_2 {
 
 object Problem3 {
   def main(args: Array[String]) {
+    problemPart1()
+    problemPart2()
+  }
 
+  def problemPart1(): Unit = {
     val fuelManagementSystemFile = Source.fromResource("fuelmanagementsystem.txt")
     val fuelManagementSystemWires = fuelManagementSystemFile.getLines().toArray
 
@@ -65,7 +69,17 @@ object Problem3 {
     val intersection = fuelManagementSystemSolverTest.getIntersection(fuelManagementSystemWires)
     val closestIntersection = fuelManagementSystemSolverTest.findClosestIntersection(intersection)
 
-    println(closestIntersection)
     println(Math.abs(closestIntersection._1) + Math.abs(closestIntersection._2))
+  }
+
+  def problemPart2(): Unit = {
+    val fuelManagementSystemFile = Source.fromResource("fuelmanagementsystem.txt")
+    val fuelManagementSystemWires = fuelManagementSystemFile.getLines().toArray
+
+    val fuelManagementSystemSolver = new FuelManagementSystemSolver
+    val intersection = fuelManagementSystemSolver.getIntersection(fuelManagementSystemWires)
+    val intersectionWithMinimumSteps = fuelManagementSystemSolver.findIntersectionAtMinimumSteps(intersection)
+
+    println(intersectionWithMinimumSteps._2._2)
   }
 }

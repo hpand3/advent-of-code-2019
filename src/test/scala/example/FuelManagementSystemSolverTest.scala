@@ -39,4 +39,11 @@ class FuelManagementSystemSolverTest extends AnyFlatSpec {
     val manhattanDistance = fuelManagementSystemSolverTest.manhattanDistance(closestIntersection)
     assert(manhattanDistance == 159)
   }
+
+  it should "find mininmum steps to intersection" in {
+    val fuelManagementSystemSolver = new FuelManagementSystemSolver
+    val intersection = fuelManagementSystemSolver.getIntersection(wiresComplexMultipleIntersections)
+    val intersectionWithMinimumSteps = fuelManagementSystemSolver.findIntersectionAtMinimumSteps(intersection)
+    assert(intersectionWithMinimumSteps._2._2 == 30)
+  }
 }

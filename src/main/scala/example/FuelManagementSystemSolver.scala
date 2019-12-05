@@ -9,6 +9,9 @@ class WireState {
 }
 
 class FuelManagementSystemSolver {
+  def findIntersectionAtMinimumSteps(intersection: Array[((Int, Int), (Int, Int))]): ((Int, Int), (Int, Int)) = {
+    intersection.minBy(_._2._2)
+  }
 
   def findClosestIntersection(intersection: Array[((Int, Int), (Int, Int))]): (Int, Int) = {
     intersection.minBy({
@@ -44,6 +47,7 @@ class FuelManagementSystemSolver {
     val endX = startX - distance
     var newWireState = wireState
     for (positionX <- (startX - 1) to endX by -1) {
+      newWireState.moveCount += 1
       newWireState = setCursorPosition(positionX, newWireState.cursor._2, newWireState)
     }
     newWireState
@@ -54,6 +58,7 @@ class FuelManagementSystemSolver {
     val endY = startY + distance
     var newWireState = wireState
     for (positionY <- (startY + 1) to endY) {
+      newWireState.moveCount += 1
       newWireState = setCursorPosition(newWireState.cursor._1, positionY, newWireState)
     }
     newWireState
@@ -64,6 +69,7 @@ class FuelManagementSystemSolver {
     val endY = startY - distance
     var newWireState = wireState
     for (positionY <- (startY - 1) to endY by -1) {
+      newWireState.moveCount += 1
       newWireState = setCursorPosition(newWireState.cursor._1, positionY, newWireState)
     }
     newWireState
