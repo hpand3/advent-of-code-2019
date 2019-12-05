@@ -1,6 +1,16 @@
 package example
 
 class PasswordCriteria {
+  def hasIncreasingDigits(password: String): Boolean = {
+    for (i <- 0 until password.length - 1) {
+      if (password(i) < password(i+1)) {
+        return false
+      }
+    }
+    true
+  }
+
+
   def hasAdjacentDigits(password: String): Boolean = {
     for (i <- 0 until password.length - 1) {
       if (password(i) == password(i+1)) {

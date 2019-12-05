@@ -27,4 +27,14 @@ class PasswordCriteriaTest extends AnyFlatSpec {
     val passwordCriteria = new PasswordCriteria
     assert(passwordCriteria.hasAdjacentDigits("122456"))
   }
+
+  it should "not accept if a following digit is lower than the previous one" in {
+    val passwordCriteria = new PasswordCriteria
+    assert(!passwordCriteria.hasIncreasingDigits("123956"))
+  }
+
+  it should "accept if a following digit if is greater than the previous one" in {
+    val passwordCriteria = new PasswordCriteria
+    assert(!passwordCriteria.hasIncreasingDigits("123456"))
+  }
 }
