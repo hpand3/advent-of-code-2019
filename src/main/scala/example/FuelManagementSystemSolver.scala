@@ -5,6 +5,7 @@ import scala.collection.mutable.Map
 
 class FuelManagementSystemSolver {
 
+  // TODO: Refactor this to not use a global variable
   var cursor: (Int, Int) = (0,0)
 
   def findClosestIntersection(intersection: Array[(Int, Int)]): (Int, Int) = {
@@ -69,6 +70,7 @@ class FuelManagementSystemSolver {
     var state: mutable.Map[(Int, Int), Int] = mutable.Map.empty[(Int, Int), Int]
 
     for (wireDirection <- wiresWithDirections) {
+      // TODO: Maybe wrap this into its own case class
       var wireState = mutable.Map.empty[(Int, Int), Int]
       wireState = resetCursor(wireState)
       for (movement <- wireDirection) {
