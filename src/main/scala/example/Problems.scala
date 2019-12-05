@@ -54,3 +54,18 @@ object Problem2_2 {
     println(s"Answer: $answer")
   }
 }
+
+object Problem3 {
+  def main(args: Array[String]) {
+
+    val fuelManagementSystemFile = Source.fromResource("fuelmanagementsystem.txt")
+    val fuelManagementSystemWires = fuelManagementSystemFile.getLines().toArray
+
+    val fuelManagementSystemSolverTest = new FuelManagementSystemSolver
+    val intersection = fuelManagementSystemSolverTest.getIntersection(fuelManagementSystemWires)
+    val closestIntersection = fuelManagementSystemSolverTest.findClosestIntersection(intersection)
+
+    println(closestIntersection)
+    println(Math.abs(closestIntersection._1) + Math.abs(closestIntersection._2))
+  }
+}
