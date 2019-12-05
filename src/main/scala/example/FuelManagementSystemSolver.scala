@@ -1,12 +1,14 @@
 package example
 
 import scala.collection.mutable
-import scala.collection.mutable.Map
+
+class WireState {
+  var state: mutable.Map[(Int, Int), Int] = mutable.Map.empty[(Int, Int), Int]
+  var moveCount: Int = 0
+  var cursor: (Int, Int) = (0,0)
+}
 
 class FuelManagementSystemSolver {
-
-  // TODO: Refactor this to not use a global variable
-  var cursor: (Int, Int) = (0,0)
 
   def findClosestIntersection(intersection: Array[(Int, Int)]): (Int, Int) = {
     intersection.minBy(manhattanDistance)
@@ -14,53 +16,54 @@ class FuelManagementSystemSolver {
 
   def manhattanDistance(coord: (Int, Int)): Int = Math.abs(coord._1) + Math.abs(coord._2)
 
-  def resetCursor(state: mutable.Map[(Int, Int), Int]): mutable.Map[(Int, Int), Int] = {
+  def resetCursor(state: WireState): WireState = {
     setCursorPosition(0,0, state)
   }
 
-  def setCursorPosition(x: Int, y: Int, state: mutable.Map[(Int, Int), Int]): mutable.Map[(Int, Int), Int] = {
-    cursor = (x, y)
-    state += (cursor -> 1)
+  def setCursorPosition(x:Int, y: Int, wireState: WireState): WireState = {
+    wireState.cursor = (x, y)
+    wireState.state += (wireState.cursor -> 1)
+    wireState
   }
 
-  def moveRight(distance: Int, state: mutable.Map[(Int, Int), Int]): mutable.Map[(Int, Int), Int] = {
-    val startX = cursor._1
+  def moveRight(distance: Int, wireState: WireState): WireState = {
+    val startX = wireState.cursor._1
     val endX = startX + distance
-    var finalState = state
+    var newWireState = wireState
     for (positionX <- (startX + 1) to endX) {
-      finalState = setCursorPosition(positionX, cursor._2, state)
+      newWireState = setCursorPosition(positionX, newWireState.cursor._2, newWireState)
     }
-    finalState
+    newWireState
   }
 
-  def moveLeft(distance: Int, state: mutable.Map[(Int, Int), Int]): mutable.Map[(Int, Int), Int] = {
-    val startX = cursor._1
+  def moveLeft(distance: Int, wireState: WireState): WireState = {
+    val startX = wireState.cursor._1
     val endX = startX - distance
-    var finalState = state
+    var newWireState = wireState
     for (positionX <- (startX - 1) to endX by -1) {
-      finalState = setCursorPosition(positionX, cursor._2, state)
+      newWireState = setCursorPosition(positionX, newWireState.cursor._2, newWireState)
     }
-    finalState
+    newWireState
   }
 
-  def moveUp(distance: Int, state: mutable.Map[(Int, Int), Int]): mutable.Map[(Int, Int), Int] = {
-    val startY = cursor._2
+  def moveUp(distance: Int, wireState: WireState): WireState = {
+    val startY = wireState.cursor._2
     val endY = startY + distance
-    var finalState = state
+    var newWireState = wireState
     for (positionY <- (startY + 1) to endY) {
-      finalState = setCursorPosition(cursor._1, positionY, state)
+      newWireState = setCursorPosition(newWireState.cursor._1, positionY, newWireState)
     }
-    finalState
+    newWireState
   }
 
-  def moveDown(distance: Int, state: mutable.Map[(Int, Int), Int]): mutable.Map[(Int, Int), Int] = {
-    val startY = cursor._2
+  def moveDown(distance: Int, wireState: WireState): WireState = {
+    val startY = wireState.cursor._2
     val endY = startY - distance
-    var finalState = state
+    var newWireState = wireState
     for (positionY <- (startY - 1) to endY by -1) {
-      setCursorPosition(cursor._1, positionY, state)
+      newWireState = setCursorPosition(newWireState.cursor._1, positionY, newWireState)
     }
-    finalState
+    newWireState
   }
 
   def getIntersection(wires: Array[String]): Array[(Int, Int)] = {
@@ -70,8 +73,7 @@ class FuelManagementSystemSolver {
     var state: mutable.Map[(Int, Int), Int] = mutable.Map.empty[(Int, Int), Int]
 
     for (wireDirection <- wiresWithDirections) {
-      // TODO: Maybe wrap this into its own case class
-      var wireState = mutable.Map.empty[(Int, Int), Int]
+      var wireState = new WireState
       wireState = resetCursor(wireState)
       for (movement <- wireDirection) {
         val (direction, distanceStr) = movement.splitAt(1)
@@ -85,7 +87,7 @@ class FuelManagementSystemSolver {
         }
         wireNumber += 1
       }
-      state = state ++ wireState.map({
+      state = state ++ wireState.state.map({
         case (k, v) => k -> (v + state.getOrElse(k, 0))
       })
     }
