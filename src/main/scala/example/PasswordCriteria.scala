@@ -6,7 +6,7 @@ class PasswordCriteria {
   }
 
   def validPassword(password: String): Boolean = {
-    hasIncreasingDigits(password) && hasAdjacentDigits(password) && isSixDigits(password)
+    isSixDigits(password) && hasIncreasingDigits(password) && hasAdjacentDigits(password)
   }
 
   def hasIncreasingDigits(password: String): Boolean = {
@@ -20,12 +20,12 @@ class PasswordCriteria {
 
 
   def hasAdjacentDigits(password: String): Boolean = {
-    for (i <- 0 until password.length - 1) {
-      if (password(i) == password(i+1)) {
-        return true
-      }
-    }
-    false
+    password
+      .groupBy(identity)
+      .mapValues(_.length)
+      .filter(_._2 == 2)
+      .keys.sum >= 1
+
   }
 
   def isSixDigits(password: String): Boolean = password.length == 6 && (password forall Character.isDigit)

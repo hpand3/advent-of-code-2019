@@ -86,10 +86,6 @@ object Problem3 {
 
 object Problem4 {
   def main(args: Array[String]) {
-    problemPart1()
-  }
-
-  def problemPart1(): Unit = {
     val start = 193651
     val end = 649729
 
