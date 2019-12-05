@@ -17,4 +17,14 @@ class PasswordCriteriaTest extends AnyFlatSpec {
     val passwordCriteria = new PasswordCriteria
     assert(!passwordCriteria.isSixDigits("12142A"))
   }
+
+  it should "not accept when two adjacent digits don't exist" in {
+    val passwordCriteria = new PasswordCriteria
+    assert(!passwordCriteria.hasAdjacentDigits("123456"))
+  }
+
+  it should "accept when two adjacent digits exist" in {
+    val passwordCriteria = new PasswordCriteria
+    assert(passwordCriteria.hasAdjacentDigits("122456"))
+  }
 }
