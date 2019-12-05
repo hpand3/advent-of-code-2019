@@ -1,6 +1,10 @@
 package example
 
 class PasswordCriteria {
+  def getPossibleCombinations(start: Int, end: Int): Array[Int] = {
+    (start to end).filter(s => validPassword(s.toString)).toArray
+  }
+
   def validPassword(password: String): Boolean = {
     hasIncreasingDigits(password) && hasAdjacentDigits(password) && isSixDigits(password)
   }

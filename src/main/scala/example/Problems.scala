@@ -83,3 +83,18 @@ object Problem3 {
     println(intersectionWithMinimumSteps._2._2)
   }
 }
+
+object Problem4 {
+  def main(args: Array[String]) {
+    problemPart1()
+  }
+
+  def problemPart1(): Unit = {
+    val start = 193651
+    val end = 649729
+
+    val passwordCriteria = new PasswordCriteria
+    val validPasswordsLength = passwordCriteria.getPossibleCombinations(start, end).length
+    println(s"Part 1: Number of valid passwords are $validPasswordsLength")
+  }
+}

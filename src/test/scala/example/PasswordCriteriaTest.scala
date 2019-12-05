@@ -53,4 +53,13 @@ class PasswordCriteriaTest extends AnyFlatSpec {
     assert(passwordCriteria.validPassword("112346"))
     assert(!passwordCriteria.validPassword("11234A"))
   }
+
+  it should "find the number of passwords that fit the criteria" in {
+    val start = 193651
+    val end = 649729
+
+    val passwordCriteria = new PasswordCriteria
+    val validPasswords = passwordCriteria.getPossibleCombinations(start, end)
+    assert(validPasswords.length == 1605)
+  }
 }
