@@ -3,15 +3,17 @@ package example
 import scala.collection.mutable
 
 class WireState {
-  var state: mutable.Map[(Int, Int), Int] = mutable.Map.empty[(Int, Int), Int]
+  var state: mutable.Map[(Int, Int), (Int, Int)] = mutable.Map.empty[(Int, Int), (Int, Int)]
   var moveCount: Int = 0
   var cursor: (Int, Int) = (0,0)
 }
 
 class FuelManagementSystemSolver {
 
-  def findClosestIntersection(intersection: Array[(Int, Int)]): (Int, Int) = {
-    intersection.minBy(manhattanDistance)
+  def findClosestIntersection(intersection: Array[((Int, Int), (Int, Int))]): (Int, Int) = {
+    intersection.minBy({
+      case (k, v) => manhattanDistance(k)
+    })._1
   }
 
   def manhattanDistance(coord: (Int, Int)): Int = Math.abs(coord._1) + Math.abs(coord._2)
@@ -22,7 +24,7 @@ class FuelManagementSystemSolver {
 
   def setCursorPosition(x:Int, y: Int, wireState: WireState): WireState = {
     wireState.cursor = (x, y)
-    wireState.state += (wireState.cursor -> 1)
+    wireState.state += (wireState.cursor -> (1, wireState.moveCount))
     wireState
   }
 
@@ -31,6 +33,7 @@ class FuelManagementSystemSolver {
     val endX = startX + distance
     var newWireState = wireState
     for (positionX <- (startX + 1) to endX) {
+      newWireState.moveCount += 1
       newWireState = setCursorPosition(positionX, newWireState.cursor._2, newWireState)
     }
     newWireState
@@ -66,11 +69,11 @@ class FuelManagementSystemSolver {
     newWireState
   }
 
-  def getIntersection(wires: Array[String]): Array[(Int, Int)] = {
+  def getIntersection(wires: Array[String]): Array[((Int, Int), (Int, Int))] = {
     val wiresWithDirections: Array[Array[String]] = wires.map(w => w.split(","))
 
     var wireNumber = 0
-    var state: mutable.Map[(Int, Int), Int] = mutable.Map.empty[(Int, Int), Int]
+    var state: mutable.Map[(Int, Int), (Int, Int)] = mutable.Map.empty[(Int, Int), (Int, Int)]
 
     for (wireDirection <- wiresWithDirections) {
       var wireState = new WireState
@@ -88,10 +91,12 @@ class FuelManagementSystemSolver {
         wireNumber += 1
       }
       state = state ++ wireState.state.map({
-        case (k, v) => k -> (v + state.getOrElse(k, 0))
+        case (k, v) => k -> (v._1 + state.getOrElse(k, (0,0))._1, v._2 + state.getOrElse(k, (0,0))._2)
       })
     }
 
-    state.filter(x => x._2 > 1 && x._1 != (0,0)).keys.toArray
+    state.filter({
+      case (k,v) => v._1 > 1 && k != (0,0)
+    }).toArray
   }
 }
