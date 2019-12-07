@@ -1,8 +1,6 @@
 package example
 
-import scala.io.{BufferedSource, Source}
-
-class SpaceshipComputer {
+class SpaceshipComputer extends ConsoleStream {
 
   def processOpcode(storage: Array[Int]): Array[Int] = {
 
@@ -15,15 +13,30 @@ class SpaceshipComputer {
       if (opcode == 99) {
         continue = false
       } else {
-        val firstMem = storage(storage(opcodeStart + 1))
-        val secondMem = storage(storage(opcodeStart + 2))
-        val storageLocation = storage(opcodeStart + 3)
         opcode match {
-          case 1 => storage(storageLocation) = firstMem + secondMem
-          case 2 => storage(storageLocation) = firstMem * secondMem
+          case 1 =>
+            val firstMem = storage(storage(opcodeStart + 1))
+            val secondMem = storage(storage(opcodeStart + 2))
+            val storageLocation = storage(opcodeStart + 3)
+            storage(storageLocation) = firstMem + secondMem
+            opcodeStart += 4
+          case 2 =>
+            val firstMem = storage(storage(opcodeStart + 1))
+            val secondMem = storage(storage(opcodeStart + 2))
+            val storageLocation = storage(opcodeStart + 3)
+            storage(storageLocation) = firstMem * secondMem
+            opcodeStart += 4
+          case 3 =>
+            val storageLocation = storage(opcodeStart + 1)
+            storage(storageLocation) = readLine("Enter int").toInt
+            opcodeStart += 2
+          case 4 =>
+            val storageLocation = storage(opcodeStart + 1)
+            print(storage(storageLocation).toString)
+            opcodeStart += 2
         }
       }
-      opcodeStart += 4
+
     }
     storage
   }
