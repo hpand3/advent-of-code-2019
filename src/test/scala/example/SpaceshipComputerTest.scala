@@ -51,4 +51,11 @@ class SpaceshipComputerTest extends AnyFlatSpec{
 
     assert(spaceshipComputer.printOutput contains inputValue)
   }
+
+  it should "support four digit instruction set" in {
+    val spaceshipComputer = new SpaceshipComputer
+    val storage = "1002,4,3,4,33".split(",").map(_.toInt)
+    val output = spaceshipComputer.processOpcode(storage).mkString(",")
+    assert(output == "1002,4,3,4,99")
+  }
 }
