@@ -1,7 +1,5 @@
 package example
 
-import java.io.ByteArrayInputStream
-
 import org.scalatest.flatspec.AnyFlatSpec
 
 import scala.io.Source

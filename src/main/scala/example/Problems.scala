@@ -94,3 +94,15 @@ object Problem4 {
     println(s"Part 1: Number of valid passwords are $validPasswordsLength")
   }
 }
+
+object Problem5 {
+  def main(args: Array[String]) {
+    val spaceshipComputer = new SpaceshipComputer
+
+    val opcodeFile = Source.fromResource("opcodes_problem5.csv")
+    val opcodeStr = opcodeFile.getLines().toArray
+    val storage = opcodeStr(0).split(",").map(_.toInt)
+
+    spaceshipComputer.processOpcode(storage)
+  }
+}

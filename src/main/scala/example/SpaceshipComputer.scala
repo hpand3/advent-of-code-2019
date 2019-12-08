@@ -8,7 +8,8 @@ class SpaceshipComputer extends ConsoleStream {
     var continue = true
 
     while (instructionStart < storage.length && continue) {
-      val instruction = storage(instructionStart).toString.takeRight(4)
+      val instructionRaw = storage(instructionStart)
+      val instruction = "%04d".format(instructionRaw)
       val opcode = instruction.takeRight(2).toInt
 
       if (opcode == 99) {
@@ -25,14 +26,16 @@ class SpaceshipComputer extends ConsoleStream {
 
             var firstMem = 0
             if (parameterMode1 == 0) {
-              firstMem = storage(storage(instructionStart + 1))
+              val location = storage(instructionStart + 1)
+              firstMem = storage(location)
             } else if (parameterMode1 == 1) {
               firstMem = storage(instructionStart + 1)
             }
 
             var secondMem = 0
             if (parameterMode2 == 0) {
-              secondMem = storage(storage(instructionStart + 2))
+              val location = storage(instructionStart + 2)
+              secondMem = storage(location)
             } else if (parameterMode2 == 1) {
               secondMem = storage(instructionStart + 2)
             }
@@ -50,14 +53,16 @@ class SpaceshipComputer extends ConsoleStream {
 
             var firstMem = 0
             if (parameterMode1 == 0) {
-              firstMem = storage(storage(instructionStart + 1))
+              val location = storage(instructionStart + 1)
+              firstMem = storage(location)
             } else if (parameterMode1 == 1) {
               firstMem = storage(instructionStart + 1)
             }
 
             var secondMem = 0
             if (parameterMode2 == 0) {
-              secondMem = storage(storage(instructionStart + 2))
+              val location = storage(instructionStart + 2)
+              secondMem = storage(location)
             } else if (parameterMode2 == 1) {
               secondMem = storage(instructionStart + 2)
             }
@@ -70,8 +75,20 @@ class SpaceshipComputer extends ConsoleStream {
             storage(storageLocation) = readLine("Enter int").toInt
             instructionStart += 2
           case 4 =>
-            val storageLocation = storage(instructionStart + 1)
-            print(storage(storageLocation).toString)
+            var parameterMode1 = 0
+            if (instruction.length > 2) {
+              parameterMode1 = instruction.charAt(1).asDigit
+            }
+
+            var outputValue = 0
+            if (parameterMode1 == 0) {
+              val location = storage(instructionStart + 1)
+              outputValue = storage(location)
+            } else if (parameterMode1 == 1) {
+              outputValue = storage(instructionStart + 1)
+            }
+
+            print(outputValue.toString)
             instructionStart += 2
         }
       }
